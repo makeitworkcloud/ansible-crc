@@ -1,0 +1,6 @@
+---
+- name: Test CRC Deployment
+  hosts: localhost
+  remote_user: root
+  roles:
+    - crc
