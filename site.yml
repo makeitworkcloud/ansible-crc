@@ -6,7 +6,7 @@
   tasks:
     - name: Load encrypted credentials
       community.sops.load_vars:
-        file: secrets.yml
+        file: secrets/secrets.yml
 - name: Deploy crc
   gather_facts: false
   hosts: all

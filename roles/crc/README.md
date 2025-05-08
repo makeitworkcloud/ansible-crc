@@ -1,6 +1,6 @@
 # crc
 
-CRC Deployment
+Ansible role to deploy OpenShift Local (CRC) to target server with an external DNS root name.
 
 ## Table of content
 
