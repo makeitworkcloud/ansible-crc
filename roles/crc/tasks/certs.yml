@@ -32,7 +32,7 @@
     login
     --insecure-skip-tls-verify=true
     -u kubeadmin
-    -p "{{ kubeadmin_password | default('crc') }}"
+    -p "{{ crc_kubeadmin_password | default('crc') }}"
     https://api.crc.testing:6443
   register: oc_login_cmd
   changed_when: oc_login_cmd.rc != 0

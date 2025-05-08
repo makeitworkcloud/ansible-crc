@@ -11,7 +11,7 @@
 
 - name: Copy pull secret
   ansible.builtin.copy:
-    content: "{{ pull_secret | default('') }}"
+    content: "{{ crc_pull_secret | default('') }}"
     dest: /usr/local/etc/pull-secret.txt
     owner: root
     group: root
@@ -37,7 +37,7 @@
       /usr/local/bin/crc config set consent-telemetry no
       /usr/local/bin/crc config set cpus {{ crc_cpus | default('10') }}
       /usr/local/bin/crc config set disk-size {{ crc_disk_size | default('500') }}
-      /usr/local/bin/crc config set kubeadmin-password {{ kubeadmin_password | default('crc') }}
+      /usr/local/bin/crc config set kubeadmin-password {{ crc_kubeadmin_password | default('crc') }}
       /usr/local/bin/crc config set memory {{ crc_memory | default('57344') }}
       /usr/local/bin/crc config set pull-secret-file /usr/local/etc/pull-secret.txt
   register: config_crc_cmd
