@@ -1,0 +1,20 @@
+---
+- name: Copy oc
+  ansible.builtin.copy:
+    src: oc
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  become_user: root
+
+- name: Copy kubectl
+  ansible.builtin.copy:
+    src: kubectl
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  become_user: root

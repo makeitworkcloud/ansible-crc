@@ -1,0 +1,109 @@
+---
+
+# https://github.com/crc-org/engineering-docs/blob/main/content/Change-the-domain-for-CRC.md
+
+- name: Propagate certificate files
+  ansible.builtin.shell:
+    cmd: |
+      openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout /usr/local/etc/crc.key -out /usr/local/etc/crc.crt -subj "/CN={{ crc_external_domain | default('makeitwork.cloud') }}" -addext "subjectAltName=DNS:*.{{ crc_external_domain | default('makeitwork.cloud') }},DNS:apps.{{ crc_external_domain | default('makeitwork.cloud') }},DNS:*.apps.{{ crc_external_domain | default('makeitwork.cloud') }},DNS:api.{{ crc_external_domain | default('makeitwork.cloud') }},DNS:host.crc.testing,DNS:api.crc.testing,DNS:*.apps-crc.testing
+  args:
+    creates: /usr/local/etc/crc.key
+  become: true
+  become_user: root
+
+- name: Add cert to ca trust
+  ansible.builtin.shell: |
+    cp /usr/local/etc/crc.crt /etc/pki/ca-trust/source/anchors/crc.crt && update-ca-trust
+  become: true
+  become_user: root
+  register: ca_trust_cmd
+  changed_when: ca_trust_cmd.rc != 0
+
+- name: Fix key readability
+  ansible.builtin.file:
+    path: /usr/local/etc/crc.key
+    mode: '0644'
+  become: true
+  become_user: root
+
+- name: Login to OpenShift
+  ansible.builtin.command: >
+    /usr/local/bin/oc
+    login
+    --insecure-skip-tls-verify=true
+    -u kubeadmin
+    -p \"{{ kubeadmin_password | default('crc') }}\"
+    https://api.crc.testing:6443
+  register: oc_login_cmd
+  changed_when: oc_login_cmd.rc != 0
+
+- name: Display output
+  ansible.builtin.debug:
+    var: "{{ item }}"
+  loop:
+    - oc_login_cmd.stdout_lines
+    - oc_login_cmd.stderr_lines
+
+- name: Propagate OpenShift secret
+  ansible.builtin.shell:
+    cmd: |
+      if [[ $(oc get secret crc-tls-secret -n openshift-config 2>&1) == *"Error from server"* ]]
+      then
+        oc create secret tls crc-tls-secret --cert=/usr/local/etc/crc.crt --key=/usr/local/etc/crc.key -n openshift-config
+      fi
+  register: oc_create_secret_cmd
+  changed_when: oc_create_secret_cmd.rc != 0
+
+- name: Display output
+  ansible.builtin.debug:
+    var: "{{ item }}"
+  loop:
+    - oc_create_secret_cmd.stdout_lines
+    - oc_create_secret_cmd.stderr_lines
+
+- name: Patch ingress
+  kubernetes.core.k8s:
+    state: patched
+    api_version: config.openshift.io/v1
+    kind: Ingress
+    name: cluster
+    definition:
+      spec:
+        appsDomain: "apps.{{ crc_external_domain | default('makeitwork.cloud') }}"
+        componentRoutes:
+          - hostname: "console-openshift-console.apps.{{ crc_external_domain | default('makeitwork.cloud') }}"
+            name: console
+            namespace: openshift-console
+            servingCertKeyPairSecret:
+              name: crc-tls-secret
+          - hostname: "oauth-openshift.apps.{{ crc_external_domain | default('makeitwork.cloud') }}"
+            name: oauth-openshift
+            namespace: openshift-console
+            servingCertKeyPairSecret:
+              name: crc-tls-secret
+
+- name: Patch API server
+  kubernetes.core.k8s:
+    state: patched
+    api_version: config.openshift.io/v1
+    kind: APIServer
+    name: cluster
+    definition:
+      spec:
+        servingCerts:
+          namedCertificates:
+            - names:
+                - "api.{{ crc_external_domain | default('makeitwork.cloud') }}"
+              servingCertificate:
+                name: crc-tls-secret
+
+- name: Patch default route
+  kubernetes.core.k8s:
+    state: patched
+    api_version: route.openshift.io/v1
+    kind: Route
+    name: default-route
+    namespace: openshift-image-registry
+    definition:
+      spec:
+        host: "default-route-openshift-image-registry.{{ crc_external_domain | default('makeitwork.cloud') }}"

@@ -1,2 +1,13 @@
 ---
 # tasks file for crc
+<<<<<<< HEAD
+=======
+- name: Running hosts.yml
+  ansible.builtin.include_tasks: hosts.yml
+- name: Running client.yml
+  ansible.builtin.include_tasks: client.yml
+- name: Running crc.yml
+  ansible.builtin.include_tasks: crc.yml
+- name: Running certs.yml
+  ansible.builtin.include_tasks: certs.yml
+>>>>>>> b0d50e2 (Deployment working)

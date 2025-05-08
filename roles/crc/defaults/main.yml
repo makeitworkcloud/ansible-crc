@@ -1,2 +1,6 @@
 ---
 # defaults file for crc
+<<<<<<< HEAD
+=======
+kubeadmin_password: crc
+>>>>>>> b0d50e2 (Deployment working)
