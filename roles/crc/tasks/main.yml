@@ -1,5 +1,7 @@
 ---
 # tasks file for crc
+- name: Running firewalld.yml
+  ansible.builtin.include_tasks: firewalld.yml
 - name: Running haproxy.yml
   ansible.builtin.include_tasks: haproxy.yml
 - name: Running hosts.yml

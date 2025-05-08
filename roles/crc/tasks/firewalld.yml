@@ -1,0 +1,12 @@
+---
+- name: Permit HTTPS traffic
+  ansible.posix.firewalld:
+    protocol: https
+    permanent: true
+    state: enabled
+
+- name: Permit API traffic
+  ansible.posix.firewalld:
+    port: 6443/tcp
+    permanent: true
+    state: enabled
