@@ -1,14 +1,14 @@
 #!/usr/bin/env ansible-playbook
 ---
 - name: Load SOPS values
-  gather_facts: true
+  gather_facts: false
   hosts: all
   tasks:
     - name: Load encrypted credentials
       community.sops.load_vars:
         file: secrets/secrets.yml
 - name: Deploy crc
-  gather_facts: false
+  gather_facts: true
   hosts: all
   roles:
     - crc
