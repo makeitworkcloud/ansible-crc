@@ -1,3 +1,5 @@
 ---
 # defaults file for crc
+crc_external_domain: makeitwork.cloud
 kubeadmin_password: crc
+pull_secret: ""
