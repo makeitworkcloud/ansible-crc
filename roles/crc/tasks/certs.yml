@@ -32,7 +32,7 @@
     login
     --insecure-skip-tls-verify=true
     -u kubeadmin
-    -p \"{{ kubeadmin_password | default('crc') }}\"
+    -p "{{ kubeadmin_password | default('crc') }}"
     https://api.crc.testing:6443
   register: oc_login_cmd
   changed_when: oc_login_cmd.rc != 0
@@ -61,7 +61,7 @@
     - oc_create_secret_cmd.stdout_lines
     - oc_create_secret_cmd.stderr_lines
 
-- name: Patch ingress
+- name: Patch Ingress
   kubernetes.core.k8s:
     state: patched
     api_version: config.openshift.io/v1
@@ -82,7 +82,7 @@
             servingCertKeyPairSecret:
               name: crc-tls-secret
 
-- name: Patch API server
+- name: Patch APIServer
   kubernetes.core.k8s:
     state: patched
     api_version: config.openshift.io/v1
@@ -97,7 +97,7 @@
               servingCertificate:
                 name: crc-tls-secret
 
-- name: Patch default route
+- name: Patch image registry Route
   kubernetes.core.k8s:
     state: patched
     api_version: route.openshift.io/v1
