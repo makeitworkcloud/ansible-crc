@@ -18,10 +18,10 @@
 - name: Add cert to ca trust
   ansible.builtin.shell: |
     cp /usr/local/etc/crc.crt /etc/pki/ca-trust/source/anchors/crc.crt && update-ca-trust
+  args:
+    creates: /etc/pki/ca-trust/source/anchors/crc.crt
   become: true
   become_user: root
-  register: ca_trust_cmd
-  changed_when: ca_trust_cmd.rc != 0
 
 - name: Fix key readability
   ansible.builtin.file:
