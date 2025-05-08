@@ -3,7 +3,6 @@ galaxy_info:
   standalone: true
   author: welchworks
   description: Ansible role to deploy OpenShift Local (CRC) to target server with an external DNS base domain. (Defaults for 12xCPU & 64 GB RAM server.)
-    server with 12 CPU & 64 GB RAM.)
   company: Make IT Work
 
   # If the issue tracker for your role is not on github, uncomment the
