@@ -5,7 +5,6 @@
 - name: Propagate certificate files
   ansible.builtin.shell:
     cmd: |
-      set -o pipefail
       openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout /usr/local/etc/crc.key -out /usr/local/etc/crc.crt -subj \
       "/CN={{ crc_external_domain | default('makeitwork.cloud') }}" -addext "subjectAltName=DNS:*.\
       {{ crc_external_domain | default('makeitwork.cloud') }},DNS:apps.{{ crc_external_domain | default('makeitwork.cloud') }}\
