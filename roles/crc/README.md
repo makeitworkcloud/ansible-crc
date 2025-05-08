@@ -26,6 +26,9 @@ CRC Deployment
 ```YAML
 kubeadmin_password: crc
 ```
+
+
+
 ## Dependencies
 
 None.

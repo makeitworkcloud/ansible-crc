@@ -78,7 +78,7 @@
               name: crc-tls-secret
           - hostname: "oauth-openshift.apps.{{ crc_external_domain | default('makeitwork.cloud') }}"
             name: oauth-openshift
-            namespace: openshift-console
+            namespace: openshift-authentication
             servingCertKeyPairSecret:
               name: crc-tls-secret
 

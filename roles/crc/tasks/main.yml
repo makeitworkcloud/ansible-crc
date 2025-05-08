@@ -8,3 +8,5 @@
   ansible.builtin.include_tasks: crc.yml
 - name: Running certs.yml
   ansible.builtin.include_tasks: certs.yml
+- name: Running banner.yml
+  ansible.builtin.include_tasks: banner.yml
