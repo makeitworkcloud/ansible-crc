@@ -6,7 +6,9 @@ CRC Deployment
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [crc_external_domain](#crc_external_domain)
   - [kubeadmin_password](#kubeadmin_password)
+  - [pull_secret](#pull_secret)
 - [Dependencies](#dependencies)
 - [License](#license)
 - [Author](#author)
@@ -19,12 +21,28 @@ CRC Deployment
 
 ## Default Variables
 
+### crc_external_domain
+
+#### Default value
+
+```YAML
+crc_external_domain: makeitwork.cloud
+```
+
 ### kubeadmin_password
 
 #### Default value
 
 ```YAML
 kubeadmin_password: crc
+```
+
+### pull_secret
+
+#### Default value
+
+```YAML
+pull_secret: ''
 ```
 
 
