@@ -1,6 +1,6 @@
 # crc
 
-Ansible role to deploy OpenShift Local (CRC) to target server with an external DNS base domain.
+Ansible role to deploy OpenShift Local (CRC) to target server with an external DNS base domain. (Default values are \ for a server with 12 CPU & 64 GB RAM.)
 
 ## Table of content
 
