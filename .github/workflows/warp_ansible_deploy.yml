@@ -1,17 +1,17 @@
 ---
-name: Run Ansible in Check & Diff Mode to Test Changes
+name: Run Ansible to Deploy Changes
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
   ANSIBLE_HOST_KEY_CHECKING: False
 
 jobs:
-  check:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,6 +38,6 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >private_key.pem
           chmod 600 private_key.pem
 
-      - name: Run Ansible Check & Diff
-        run: ./site.yml --key-file private_key.pem -C --diff
+      - name: Run Ansible Playbook
+        run: ./site.yml --key-file private_key.pem
 

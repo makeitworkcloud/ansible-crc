@@ -103,6 +103,7 @@
             namespace: openshift-authentication
             servingCertKeyPairSecret:
               name: crc-tls-secret
+  ignore_errors: "{{ ansible_check_mode }}"
   tags:
     - certs
 
@@ -120,6 +121,7 @@
                 - "api.{{ crc_external_domain | default('makeitwork.cloud') }}"
               servingCertificate:
                 name: crc-tls-secret
+  ignore_errors: "{{ ansible_check_mode }}"
   tags:
     - certs
 
@@ -155,5 +157,6 @@
             {{ crc_cert_slurp['content'] | b64decode }}
   retries: 5
   delay: 10
+  ignore_errors: "{{ ansible_check_mode }}"
   tags:
     - certs
