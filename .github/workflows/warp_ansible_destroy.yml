@@ -1,15 +1,11 @@
 ---
-name: Run Ansible to Deploy Changes
+name: Destroy existing crc cluster
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 env:
   SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-  ANSIBLE_HOST_KEY_CHECKING: False
 
 jobs:
   deploy:
@@ -25,20 +21,13 @@ jobs:
           auth_client_id: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_ID }}
           auth_client_secret: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_SECRET }}
 
-      - name: Setup SOPS
-        uses: nhedger/setup-sops@v2
-        with:
-          version: "latest"
-
-      - name: Setup Ansible
-        run: |
-          sudo apt install ansible -y
-
       - name: Setup SSH
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" >private_key.pem
           chmod 600 private_key.pem
 
-      - name: Run Ansible Playbook
-        run: ./site.yml --key-file private_key.pem
+      - name: Stop & Destroy cluster
+        run: |
+          ssh -i private_key.pem ltc.makeitwork.cloud crc stop -f
+          ssh -i private_key.pem ltc.makeitwork.cloud crc delete -f
 
