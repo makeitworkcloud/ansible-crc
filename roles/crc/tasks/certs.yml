@@ -39,7 +39,7 @@
 
 - name: Login to OpenShift
   ansible.builtin.command: >
-    /usr/local/bin/oc
+    ~/.crc/bin/oc/oc
     login
     --insecure-skip-tls-verify=true
     -u kubeadmin
@@ -65,9 +65,9 @@
 - name: Propagate OpenShift secret
   ansible.builtin.shell:
     cmd: |
-      if [[ $(oc get secret crc-tls-secret -n openshift-config 2>&1) == *"Error from server"* ]]
+      if [[ $(~/.crc/bin/oc/oc get secret crc-tls-secret -n openshift-config 2>&1) == *"Error from server"* ]]
       then
-        oc create secret tls crc-tls-secret --cert=/usr/local/etc/crc.crt --key=/usr/local/etc/crc.key -n openshift-config
+        ~/.crc/bin/oc/oc create secret tls crc-tls-secret --cert=/usr/local/etc/crc.crt --key=/usr/local/etc/crc.key -n openshift-config
       fi
   register: oc_create_secret_cmd
   changed_when: oc_create_secret_cmd.rc != 0

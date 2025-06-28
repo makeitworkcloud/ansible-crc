@@ -1,11 +1,25 @@
 ---
-- name: Copy crc binary
-  ansible.builtin.copy:
-    src: crc
+- name: Download crc
+  ansible.builtin.get_url:
+    url: https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/2.52.0/crc-linux-amd64.tar.xz
     dest: /usr/local/bin/
     owner: root
     group: root
+    mode: "0644"
+  become: true
+  become_user: root
+
+- name: Extract crc
+  ansible.builtin.unarchive:
+    src: /usr/local/bin/crc-linux-amd64.tar.xz
+    dest: /usr/local/bin/
+    remote_src: true
+    include: crc-linux-2.52.0-amd64/crc
+    owner: root
+    group: root
     mode: "0755"
+    extra_opts:
+      - --strip-components=1
   become: true
   become_user: root
 
