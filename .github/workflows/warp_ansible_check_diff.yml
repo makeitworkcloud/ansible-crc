@@ -1,0 +1,42 @@
+---
+name: Update the OpenShift image stream for the Terraform Runner
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Connect to WARP
+        uses: Boostport/setup-cloudflare-warp@v1
+        with:
+          organization: makeitworkcloud
+          auth_client_id: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_ID }}
+          auth_client_secret: ${{ secrets.CLOUDFLARE_AUTH_CLIENT_SECRET }}
+
+      - name: Setup SOPS
+        uses: nhedger/setup-sops@v2
+        with:
+          version: "latest"
+
+      - name: Setup Ansible
+        run: |
+          sudo apt install ansible -y
+
+      - name: Setup SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" >private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Run Ansible Check & Diff
+        run: ./site.yml --key-file private_key.pem -C --diff
+
