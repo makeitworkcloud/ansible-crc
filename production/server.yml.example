@@ -1,4 +1,0 @@
-all:
-  hosts:
-    myhost.mydomain.com:
-      ansible_user: mydeployuser

@@ -22,8 +22,6 @@ repos:
     rev: v4.0.4
     hooks:
       - id: ansible-doctor
-        args:
-          - roles/crc
         additional_dependencies:
           - ansible
           - ansible-core
