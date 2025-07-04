@@ -1,8 +1,8 @@
 ---
 - name: Download crc
   ansible.builtin.get_url:
-    url: https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/2.52.0/crc-linux-amd64.tar.xz
-    dest: /usr/local/bin/
+    url: "https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/{{ crc_version | default('2.52.0') }}/crc-linux-amd64.tar.xz"
+    dest: /root/
     owner: root
     group: root
     mode: "0644"
@@ -11,10 +11,10 @@
 
 - name: Extract crc
   ansible.builtin.unarchive:
-    src: /usr/local/bin/crc-linux-amd64.tar.xz
+    src: /root/crc-linux-amd64.tar.xz
     dest: /usr/local/bin/
     remote_src: true
-    include: crc-linux-2.52.0-amd64/crc
+    include: "crc-linux-{{ crc_version | default('2.52.0') }}-amd64/crc"
     owner: root
     group: root
     mode: "0755"

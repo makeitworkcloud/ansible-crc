@@ -12,6 +12,7 @@ Ansible role to deploy OpenShift Local (CRC) with an external DNS base domain. (
   - [crc_kubeadmin_password](#crc_kubeadmin_password)
   - [crc_memory](#crc_memory)
   - [crc_pull_secret](#crc_pull_secret)
+  - [crc_version](#crc_version)
 - [Discovered Tags](#discovered-tags)
 - [Dependencies](#dependencies)
 - [License](#license)
@@ -71,6 +72,14 @@ crc_memory: 57344
 
 ```YAML
 crc_pull_secret: ''
+```
+
+### crc_version
+
+#### Default value
+
+```YAML
+crc_version: 2.52.0
 ```
 
 ## Discovered Tags
