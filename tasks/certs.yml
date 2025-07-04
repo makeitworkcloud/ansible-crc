@@ -155,7 +155,7 @@
             {{ crc_key_slurp['content'] | b64decode }}
           certificate: |
             {{ crc_cert_slurp['content'] | b64decode }}
-  retries: 30
+  retries: 50
   delay: 10
   ignore_errors: "{{ ansible_check_mode }}"
   tags:
